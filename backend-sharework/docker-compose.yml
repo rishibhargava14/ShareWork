@@ -1,0 +1,27 @@
+services:
+  mongodb:
+    image: mongo:6
+    container_name: sharework-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - sharework_mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: sharework
+
+  backend:
+    build: .
+    container_name: sharework-backend
+    restart: unless-stopped
+    ports:
+      - "${PORT:-5000}:5000"
+    env_file:
+      - .env
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/sharework
+    depends_on:
+      - mongodb
+
+volumes:
+  sharework_mongo_data:
