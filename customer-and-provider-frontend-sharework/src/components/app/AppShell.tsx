@@ -224,13 +224,12 @@ export function AppShell({
   );
 
   return (
-    <div className="flex h-screen overflow-hidden bg-white" style={{ fontFamily: "Inter, sans-serif" }}>
-      <aside className={`${open ? "flex" : "hidden"} md:flex`}>{sidebar}</aside>
+    <div className="flex h-screen overflow-hidden relative bg-white" style={{ fontFamily: "Inter, sans-serif" }}>
+      <aside className={`${open ? "" : "-translate-x-full md:translate-x-0"} z-50 transition absolute h-full md:static`}>{sidebar}</aside>
 
       {open && (
-        <button type="button" className="fixed inset-0 z-40 bg-black/30 md:hidden" aria-label="Close menu" onClick={() => setOpen(false)} />
+        <button type="button" className="fixed inset-0 z-40 transition duration-300 bg-black/30 md:hidden" aria-label="Close menu" onClick={() => setOpen(false)} />
       )}
-      {open && <div className="fixed inset-y-0 left-0 z-50 md:hidden">{sidebar}</div>}
 
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex h-[56px] shrink-0 items-center justify-between border-b border-zinc-200 bg-white px-4 md:px-6">
