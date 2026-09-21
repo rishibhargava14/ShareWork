@@ -286,44 +286,72 @@ export default function AuthForm({ initialMode = "login" }: { initialMode?: Mode
           </label>
         )}
 
-        <label className="block">
-          <span className="mb-1 block text-[12px] font-medium text-zinc-700">Email</span>
-          <input
-            name="email"
-            type="email"
-            value={values.email}
-            placeholder="you@company.com"
-            readOnly={otpPending}
-            onChange={(e) => setField("email")(e.target.value)}
-            className="h-10 w-full rounded-[8px] border border-zinc-300 px-3 text-[14px] outline-none focus:border-zinc-900"
-          />
-          {errors.email && <p className="mt-1 text-[11px] text-red-600">{errors.email}</p>}
-        </label>
+        {mode === "signup" && otpPending ? (
+          <div className="space-y-4 rounded-[12px] border border-zinc-200 bg-zinc-50 p-4">
+            <div>
+              <h2 className="text-[20px] font-bold text-zinc-900">Verify Your Email</h2>
+              <p className="mt-1 text-[12px] leading-relaxed text-zinc-600">We sent a 6-digit OTP to:</p>
+            </div>
 
-        {mode === "signup" && (
+            <label className="block">
+              <span className="mb-1 block text-[12px] font-medium text-zinc-700">Email</span>
+              <input
+                name="email"
+                type="email"
+                value={values.email}
+                readOnly
+                aria-readonly="true"
+                className="h-10 w-full rounded-[8px] border border-zinc-300 bg-white px-3 text-[14px] outline-none"
+              />
+            </label>
+
+            <p className="text-[12px] leading-relaxed text-zinc-600">Enter the OTP sent to your email to verify this account.</p>
+
+            <label className="block">
+              <span className="mb-1 block text-[12px] font-medium text-zinc-700">OTP</span>
+              <input
+                name="otp"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                value={values.otp}
+                placeholder="6-digit OTP"
+                onChange={(e) => setField("otp")(e.target.value)}
+                className="h-10 w-full rounded-[8px] border border-zinc-300 bg-white px-3 text-[14px] outline-none focus:border-zinc-900"
+                aria-describedby={errors.otp ? "signup-otp-error" : undefined}
+              />
+              {errors.otp && <p id="signup-otp-error" className="mt-1 text-[11px] text-red-600">{errors.otp}</p>}
+            </label>
+          </div>
+        ) : (
+          <label className="block">
+            <span className="mb-1 block text-[12px] font-medium text-zinc-700">Email</span>
+            <input
+              name="email"
+              type="email"
+              value={values.email}
+              placeholder="you@company.com"
+              readOnly={mode === "login" && otpPending}
+              onChange={(e) => setField("email")(e.target.value)}
+              className="h-10 w-full rounded-[8px] border border-zinc-300 px-3 text-[14px] outline-none focus:border-zinc-900"
+            />
+            {errors.email && <p className="mt-1 text-[11px] text-red-600">{errors.email}</p>}
+          </label>
+        )}
+
+        {mode === "signup" && !otpPending && (
           <div>
-            <span className="mb-1 block text-[12px] font-medium text-zinc-700">
-              {otpPending ? "OTP" : "Phone + OTP"}
-            </span>
-            <div className="mt-1 flex gap-2">
+            <label className="block">
+              <span className="mb-1 block text-[12px] font-medium text-zinc-700">Phone Number</span>
               <input
                 name="phone"
                 type="tel"
                 value={values.phone}
                 placeholder="+91 98xxxxxx10"
-                readOnly={otpPending}
                 onChange={(e) => setField("phone")(e.target.value)}
-                className="h-10 flex-1 rounded-[8px] border border-zinc-300 px-3 text-[14px] outline-none focus:border-zinc-900"
+                className="h-10 w-full rounded-[8px] border border-zinc-300 px-3 text-[14px] outline-none focus:border-zinc-900"
               />
-              <input
-                name="otp"
-                value={values.otp}
-                placeholder="6-digit OTP"
-                onChange={(e) => setField("otp")(e.target.value)}
-                className="h-10 w-[110px] rounded-[8px] border border-zinc-300 px-3 text-[14px] outline-none focus:border-zinc-900"
-              />
-            </div>
-            {(errors.phone || errors.otp) && <p className="mt-1 text-[11px] text-red-600">{errors.phone || errors.otp}</p>}
+              {errors.phone && <p className="mt-1 text-[11px] text-red-600">{errors.phone}</p>}
+            </label>
           </div>
         )}
 
@@ -378,7 +406,7 @@ export default function AuthForm({ initialMode = "login" }: { initialMode?: Mode
 
         <button
           type="submit"
-          disabled={loading || !role}
+          disabled={loading || !role || (mode === "signup" && otpPending && !/^\d{6}$/.test(values.otp.trim()))}
           className={`h-10 w-full rounded-[8px] text-[13px] font-medium text-white ${
             !role ? "cursor-not-allowed bg-zinc-200 text-zinc-500" : customer ? "bg-[#2563EB]" : "bg-[#16A34A]"
           }`}
