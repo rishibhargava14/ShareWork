@@ -3,7 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Briefcase, Check, CodeXml } from "@/components/icons/HtmlIcons";
 import { ApiError } from "@/lib/api";
-import { refreshSession, resendEmailOtp, signIn, signUp, verifyEmailOtp, type Role } from "@/lib/auth";
+import { resendEmailOtp, signIn, signUp, verifyEmailOtp, type Role } from "@/lib/auth";
 import { useSpaNav } from "@/components/app/SpaNav";
 import ForgotPasswordFlow from "@/components/auth/ForgotPasswordFlow";
 
@@ -57,8 +57,9 @@ export default function AuthForm({ initialMode = "login" }: { initialMode?: Mode
     setErrors((e) => (e[key] ? { ...e, [key]: undefined } : e));
   };
 
-  const enterApp = async (userRole: Role) => {
-    await refreshSession();
+  // verify/login already persist tokens+user via storeAuth; role is enough for destination.
+  // Do not await refreshSession()/GET /users/me here — Discover/Dashboard hydrate themselves.
+  const enterApp = (userRole: Role) => {
     spa.goApp(userRole === "provider" ? "dashboard" : "discover");
   };
 
@@ -88,7 +89,7 @@ export default function AuthForm({ initialMode = "login" }: { initialMode?: Mode
     try {
       if (otpPending) {
         const user = await verifyEmailOtp({ email: values.email, otp: values.otp.trim() });
-        await enterApp(user.role);
+        enterApp(user.role);
         return;
       }
 
@@ -101,7 +102,7 @@ export default function AuthForm({ initialMode = "login" }: { initialMode?: Mode
           setLoading(false);
           return;
         }
-        await enterApp(result.user.role);
+        enterApp(result.user.role);
         return;
       }
 
@@ -115,7 +116,7 @@ export default function AuthForm({ initialMode = "login" }: { initialMode?: Mode
 
       if (values.otp.trim()) {
         const user = await verifyEmailOtp({ email: values.email, otp: values.otp.trim() });
-        await enterApp(user.role);
+        enterApp(user.role);
         return;
       }
 
