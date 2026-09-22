@@ -57,8 +57,8 @@ export default function AuthForm({ initialMode = "login" }: { initialMode?: Mode
     setErrors((e) => (e[key] ? { ...e, [key]: undefined } : e));
   };
 
-  // verify/login already persist tokens+user via storeAuth; role is enough for destination.
-  // Do not await refreshSession()/GET /users/me here — Discover/Dashboard hydrate themselves.
+  // verify/login already persist tokens+user via storeAuth; role is enough for destination
+  // Do not await refreshSession()/GET /users/me here — Discover/Dashboard hydrate themselves
   const enterApp = (userRole: Role) => {
     spa.goApp(userRole === "provider" ? "dashboard" : "discover");
   };
