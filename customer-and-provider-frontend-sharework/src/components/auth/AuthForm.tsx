@@ -279,6 +279,7 @@ export default function AuthForm({ initialMode = "login" }: { initialMode?: Mode
               name="name"
               value={values.name}
               placeholder="Aarav Mehta"
+              disabled={!role}
               readOnly={otpPending}
               onChange={(e) => setField("name")(e.target.value)}
               className="h-10 w-full rounded-[8px] border border-zinc-300 px-3 text-[14px] outline-none focus:border-zinc-900"
@@ -330,6 +331,7 @@ export default function AuthForm({ initialMode = "login" }: { initialMode?: Mode
               name="email"
               type="email"
               value={values.email}
+              disabled={!role}
               placeholder="you@company.com"
               readOnly={mode === "login" && otpPending}
               onChange={(e) => setField("email")(e.target.value)}
@@ -345,10 +347,11 @@ export default function AuthForm({ initialMode = "login" }: { initialMode?: Mode
               <span className="mb-1 block text-[12px] font-medium text-zinc-700">Phone Number</span>
               <input
                 name="phone"
-                type="tel"
+                type="numeric"
                 value={values.phone}
                 placeholder="+91 98xxxxxx10"
-                onChange={(e) => setField("phone")(e.target.value)}
+                disabled={!role}
+                onChange={(e) => setField("phone")(e.target.value.replace(/\D/g, ""))}
                 className="h-10 w-full rounded-[8px] border border-zinc-300 px-3 text-[14px] outline-none focus:border-zinc-900"
               />
               {errors.phone && <p className="mt-1 text-[11px] text-red-600">{errors.phone}</p>}
@@ -378,6 +381,7 @@ export default function AuthForm({ initialMode = "login" }: { initialMode?: Mode
               type="password"
               value={values.password}
               placeholder="••••••••"
+              disabled={!role}
               onChange={(e) => setField("password")(e.target.value)}
               className="h-10 w-full rounded-[8px] border border-zinc-300 px-3 text-[14px] outline-none focus:border-zinc-900"
             />
