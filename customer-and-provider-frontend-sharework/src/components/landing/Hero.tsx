@@ -1,54 +1,115 @@
 "use client";
 
-import { Shield, Users, DollarSign, ArrowRight } from "@/components/icons/HtmlIcons";
-import PreviewCard from "@/components/landing/PreviewCard";
 import { useSpaNav } from "@/components/app/SpaNav";
+import PreviewCard from "@/components/landing/PreviewCard";
+import { Search } from "lucide-react";
 
 export default function Hero() {
   const spa = useSpaNav();
+
+  const popular = [
+    "Website Design",
+    "Figma",
+    "React",
+    "UI/UX",
+    "Logo Design",
+    "Video Editing",
+    "Architecture",
+    "Branding",
+  ];
+
   return (
-    <section className="mx-auto grid max-w-[1200px] items-center gap-10 px-6 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-10 md:py-28">
-      <div>
-        <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-[12px] font-medium text-zinc-600">
-          <span className="h-2 w-2 rounded-full bg-green-500" /> Fixed price. No hourly surprises.
-        </p>
-        <h1 className="text-[42px] font-bold leading-[0.95] tracking-tight text-zinc-900 md:text-[56px]">
-          Find Top Tech Talent
-          <br />
-          for Fixed Price
-        </h1>
-        <p className="mt-5 max-w-[480px] text-[16px] leading-relaxed text-zinc-600">
-          Chat directly, agree on scope, fund escrow. Payment releases only after you approve delivery. No bidding wars.
-        </p>
-        <div className="mt-8 flex gap-3">
-          <button
-            type="button"
-            onClick={() => spa.goAuth("signup")}
-            className="inline-flex items-center gap-2 rounded-md bg-zinc-900 px-6 py-3 text-[14px] font-medium text-white"
-          >
-            Get Started <ArrowRight size={16} />
-          </button>
-          <button
-            type="button"
-            onClick={() => spa.goAuth("login")}
-            className="rounded-md border border-zinc-200 px-6 py-3 text-[14px] font-medium text-zinc-700"
-          >
-            Sign In
-          </button>
+    <section className="bg-white">
+      <div className="mx-auto grid max-w-[1400px] items-center gap-10 px-4 pb-10 pt-8 md:px-8 md:pb-12 md:pt-[56px] lg:grid-cols-2">
+        <div>
+          <h1 className="text-[38px] font-extrabold leading-[0.96] tracking-[-0.04em] text-[#222325] md:text-[56px]">
+            Find the perfect
+            <br />
+            <span className="font-extrabold italic text-[#1DBF73]">
+              expert professional
+            </span>
+            <br />
+            services for your
+            <br />
+            <span className="font-semibold text-[#62646A]">Business</span>
+          </h1>
+
+          <p className="mt-5 max-w-[520px] text-[18px] leading-7 text-[#62646A]">
+            Fixed-price only. Chat → Agreement → Escrow → Delivery → Payment.
+            No hourly surprises. Trusted by 2,340+ businesses.
+          </p>
+
+          <div className="mt-8 flex h-[60px] max-w-[580px] overflow-hidden rounded-[4px] border border-[#C5C6C9] bg-white shadow-[0_6px_20px_rgba(0,0,0,0.08)] focus-within:border-[#222325]">
+            <div className="flex min-w-0 flex-1 items-center gap-3 px-5">
+              <span className="text-[22px] text-[#95979D]"><Search size={18}/></span>
+              <input
+                aria-label="Search for any service"
+                placeholder="Search for any service..."
+                className="w-full outline-none text-[16px] placeholder:text-[#95979D]"
+              />
+            </div>
+            <button
+              type="button"
+              className="bg-[#222325] px-8 text-[16px] font-bold text-white transition hover:bg-[#404145]"
+            >
+              Search
+            </button>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center gap-2.5">
+            <span className="text-[14px] font-bold text-[#404145]">Popular:</span>
+            {popular.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className="rounded-full border border-[#E4E5E7] bg-white px-3 py-1.5 text-[14px] font-semibold transition hover:border-[#222325] hover:bg-[#222325] hover:text-white"
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => spa.goAuth("signup")}
+              className="rounded-[4px] bg-[#222325] px-6 py-3 text-[14px] font-bold text-white transition hover:bg-[#404145]"
+            >
+              Join ShareWork
+            </button>
+            <button
+              type="button"
+              onClick={() => spa.goAuth("login")}
+              className="rounded-[4px] border border-[#222325] bg-white px-6 py-3 text-[14px] font-bold text-[#222325] transition hover:bg-[#222325] hover:text-white"
+            >
+              Sign In
+            </button>
+          </div>
         </div>
-        <div className="mt-10 flex items-center gap-6 text-[13px] text-zinc-500">
-          <span className="inline-flex items-center gap-1">
-            <Users size={14} /> 12k+ experts
+
+        <PreviewCard />
+      </div>
+
+      <div className="border-y border-[#E4E5E7] bg-[#FAFAFA]">
+        <div className="mx-auto flex h-[72px] max-w-[1400px] items-center gap-8 overflow-x-auto px-4 md:px-8">
+          <span className="whitespace-nowrap text-[16px] font-semibold text-[#B5B6BA]">
+            Trusted by:
           </span>
-          <span className="inline-flex items-center gap-1">
-            <Shield size={14} /> Escrow protected
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <DollarSign size={14} /> Fixed cost only
+          {["Meta", "Google", "NETFLIX", "P&G", "PayPal", "Payoneer"].map(
+            (name) => (
+              <span
+                key={name}
+                className="whitespace-nowrap text-[17px] font-extrabold uppercase tracking-tight text-[#B5B6BA]"
+              >
+                {name}
+              </span>
+            ),
+          )}
+          <span className="ml-auto hidden whitespace-nowrap text-[14px] font-medium text-[#95979D] lg:block">
+            Fixed-price escrow • No hourly surprises • 10% + GST 18%
           </span>
         </div>
       </div>
-      <PreviewCard />
     </section>
   );
 }
