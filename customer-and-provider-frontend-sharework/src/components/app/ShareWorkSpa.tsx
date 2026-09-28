@@ -6,7 +6,6 @@ import Hero from "@/components/landing/Hero";
 import Features from "@/components/landing/Features";
 import HowItWorks from "@/components/landing/HowItWorks";
 import Footer from "@/components/landing/Footer";
-import Logo from "@/components/Logo";
 import AuthForm from "@/components/auth/AuthForm";
 import { AppShell } from "@/components/app/AppShell";
 import BrowsePage from "@/components/app/BrowsePage";
@@ -73,54 +72,16 @@ function AuthModal() {
         onClick={spa.closeAuth}
         className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
       />
-      <div className="relative w-full max-w-[880px] max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-[16px] border border-zinc-200 bg-white shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+      <div className="relative w-full max-w-[400px] max-h-[92vh] overflow-y-auto overflow-x-hidden rounded-[16px] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
         <button
           type="button"
           onClick={spa.closeAuth}
           aria-label="Close"
-          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900"
+          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
         >
           ✕
         </button>
-        <div className="grid md:grid-cols-[1.05fr_0.95fr]">
-          <div className="hidden flex-col justify-between border-r border-zinc-200 bg-zinc-50 p-8 md:flex">
-            <div>
-              <Logo accent="ink" size="sm" />
-              <h2 className="mt-6 text-[22px] font-bold leading-tight text-zinc-900">
-                One account.
-                <br />
-                Two ways to use ShareWork.
-              </h2>
-              <p className="mt-3 text-[13px] leading-relaxed text-zinc-600">
-                Select your entry on this page only. Landing has no role toggle. Role is fixed at signup. Customer and Provider are separate accounts.
-              </p>
-              <div className="mt-8 space-y-3 text-[12px]">
-                <div className="flex items-start gap-2">
-                  <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[10px] text-white">1</div>
-                  <span>
-                    <b>Choose role</b> — Customer (hire) or Provider (work)
-                  </span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[10px] text-white">2</div>
-                  <span>
-                    <b>Login/Signup</b> — same form, role decides dashboard color & flow
-                  </span>
-                </div>
-                <div className="mt-0.5 flex items-start gap-2">
-                  <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[10px] text-white">3</div>
-                  <span>
-                    <b>Fixed cost only</b> — Chat → Agreement → Escrow → Delivery → Payment
-                  </span>
-                </div>
-              </div>
-            </div>
-            <p className="text-[12px] text-zinc-500">Flat colors: Blue #2563EB for Customer, Green #16A34A for Provider. No gradients.</p>
-          </div>
-          <div className="p-6 md:p-8">
-            <AuthForm key={spa.authMode} initialMode={spa.authMode} />
-          </div>
-        </div>
+        <AuthForm key={spa.authMode} initialMode={spa.authMode} />
       </div>
     </div>
   );
