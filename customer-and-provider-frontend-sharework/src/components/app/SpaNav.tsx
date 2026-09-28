@@ -9,7 +9,7 @@ function pinHomeUrl() {
   }
 }
 
-export type SpaScreen = "landing" | "auth" | "app";
+export type SpaScreen = "landing" | "app";
 export type SpaView =
   | "discover"
   | "freelancer"
@@ -27,11 +27,13 @@ export interface SpaNav {
   screen: SpaScreen;
   view: SpaView;
   authMode: "login" | "signup";
+  authOpen: boolean;
   expertName: string;
   inboxName: string;
   projectId: string;
   goLanding: () => void;
   goAuth: (mode?: "login" | "signup") => void;
+  closeAuth: () => void;
   goApp: (view?: SpaView) => void;
   setView: (view: SpaView, extra?: { expertName?: string; inboxName?: string; projectId?: string }) => void;
 }
@@ -48,6 +50,7 @@ export function SpaProvider({ children }: { children: ReactNode }) {
   const [screen, setScreen] = useState<SpaScreen>("landing");
   const [view, setViewState] = useState<SpaView>("discover");
   const [authMode, setAuthMode] = useState<"login" | "signup">("signup");
+  const [authOpen, setAuthOpen] = useState(false);
   const [expertName, setExpertName] = useState("");
   const [inboxName, setInboxName] = useState("");
   const [projectId, setProjectId] = useState("");
@@ -56,12 +59,17 @@ export function SpaProvider({ children }: { children: ReactNode }) {
     pinHomeUrl();
   }, [screen, view]);
 
-  const goLanding = useCallback(() => setScreen("landing"), []);
+  const goLanding = useCallback(() => {
+    setAuthOpen(false);
+    setScreen("landing");
+  }, []);
   const goAuth = useCallback((mode: "login" | "signup" = "signup") => {
     setAuthMode(mode);
-    setScreen("auth");
+    setAuthOpen(true);
   }, []);
+  const closeAuth = useCallback(() => setAuthOpen(false), []);
   const goApp = useCallback((next?: SpaView) => {
+    setAuthOpen(false);
     if (next) setViewState(next);
     setScreen("app");
   }, []);
@@ -79,15 +87,17 @@ export function SpaProvider({ children }: { children: ReactNode }) {
       screen,
       view,
       authMode,
+      authOpen,
       expertName,
       inboxName,
       projectId,
       goLanding,
       goAuth,
+      closeAuth,
       goApp,
       setView,
     }),
-    [screen, view, authMode, expertName, inboxName, projectId, goLanding, goAuth, goApp, setView]
+    [screen, view, authMode, authOpen, expertName, inboxName, projectId, goLanding, goAuth, closeAuth, goApp, setView]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

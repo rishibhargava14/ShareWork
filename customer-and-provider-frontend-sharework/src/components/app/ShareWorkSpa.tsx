@@ -40,57 +40,85 @@ function Landing() {
   );
 }
 
-function Auth() {
+function AuthModal() {
   const spa = useSpaNav();
+
+  useEffect(() => {
+    if (!spa.authOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") spa.closeAuth();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [spa.authOpen, spa]);
+
+  if (!spa.authOpen) return null;
+
   return (
-    <div className="flex min-h-screen flex-col bg-[#FAFAFA]" style={{ fontFamily: "Inter, sans-serif" }}>
-      <header className="flex h-[56px] items-center justify-between border-b border-zinc-200 bg-white px-6">
-        <button type="button" onClick={spa.goLanding} className="flex items-center gap-2 font-bold tracking-tight">
-          <Logo accent="ink" size="sm" />
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={spa.authMode === "login" ? "Sign in" : "Join ShareWork"}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
+      style={{ fontFamily: "Inter, sans-serif" }}
+    >
+      <button
+        type="button"
+        aria-label="Close"
+        onClick={spa.closeAuth}
+        className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
+      />
+      <div className="relative w-full max-w-[880px] max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-[16px] border border-zinc-200 bg-white shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+        <button
+          type="button"
+          onClick={spa.closeAuth}
+          aria-label="Close"
+          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900"
+        >
+          ✕
         </button>
-        <button type="button" onClick={spa.goLanding} className="text-[13px] text-zinc-600 hover:text-zinc-900">
-          ← Back to landing
-        </button>
-      </header>
-      <div className="flex flex-1 items-center justify-center p-4 md:p-8">
-        <div className="w-full max-w-[880px] overflow-hidden rounded-[16px] border border-zinc-200 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-          <div className="grid md:grid-cols-[1.05fr_0.95fr]">
-            <div className="hidden flex-col justify-between border-r border-zinc-200 bg-zinc-50 p-8 md:flex">
-              <div>
-                <h2 className="text-[22px] font-bold leading-tight text-zinc-900">
-                  One account.
-                  <br />
-                  Two ways to use ShareWork.
-                </h2>
-                <p className="mt-3 text-[13px] leading-relaxed text-zinc-600">
-                  Select your entry on this page only. Landing has no role toggle. Role is fixed at signup. Customer and Provider are separate accounts.
-                </p>
-                <div className="mt-8 space-y-3 text-[12px]">
-                  <div className="flex items-start gap-2">
-                    <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[10px] text-white">1</div>
-                    <span>
-                      <b>Choose role</b> — Customer (hire) or Provider (work)
-                    </span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[10px] text-white">2</div>
-                    <span>
-                      <b>Login/Signup</b> — same form, role decides dashboard color & flow
-                    </span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[10px] text-white">3</div>
-                    <span>
-                      <b>Fixed cost only</b> — Chat → Agreement → Escrow → Delivery → Payment
-                    </span>
-                  </div>
+        <div className="grid md:grid-cols-[1.05fr_0.95fr]">
+          <div className="hidden flex-col justify-between border-r border-zinc-200 bg-zinc-50 p-8 md:flex">
+            <div>
+              <Logo accent="ink" size="sm" />
+              <h2 className="mt-6 text-[22px] font-bold leading-tight text-zinc-900">
+                One account.
+                <br />
+                Two ways to use ShareWork.
+              </h2>
+              <p className="mt-3 text-[13px] leading-relaxed text-zinc-600">
+                Select your entry on this page only. Landing has no role toggle. Role is fixed at signup. Customer and Provider are separate accounts.
+              </p>
+              <div className="mt-8 space-y-3 text-[12px]">
+                <div className="flex items-start gap-2">
+                  <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[10px] text-white">1</div>
+                  <span>
+                    <b>Choose role</b> — Customer (hire) or Provider (work)
+                  </span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[10px] text-white">2</div>
+                  <span>
+                    <b>Login/Signup</b> — same form, role decides dashboard color & flow
+                  </span>
+                </div>
+                <div className="mt-0.5 flex items-start gap-2">
+                  <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[10px] text-white">3</div>
+                  <span>
+                    <b>Fixed cost only</b> — Chat → Agreement → Escrow → Delivery → Payment
+                  </span>
                 </div>
               </div>
-              <p className="text-[12px] text-zinc-500">Flat colors: Blue #2563EB for Customer, Green #16A34A for Provider. No gradients.</p>
             </div>
-            <div className="p-6 md:p-8">
-              <AuthForm key={spa.authMode} initialMode={spa.authMode} />
-            </div>
+            <p className="text-[12px] text-zinc-500">Flat colors: Blue #2563EB for Customer, Green #16A34A for Provider. No gradients.</p>
+          </div>
+          <div className="p-6 md:p-8">
+            <AuthForm key={spa.authMode} initialMode={spa.authMode} />
           </div>
         </div>
       </div>
@@ -180,7 +208,6 @@ function Workspace() {
 function Root() {
   const spa = useSpaNav();
   if (spa.screen === "landing") return <Landing />;
-  if (spa.screen === "auth") return <Auth />;
   return <Workspace />;
 }
 
@@ -189,6 +216,7 @@ export default function ShareWorkSpa() {
     <SpaProvider>
       <ChatSocketGate />
       <Root />
+      <AuthModal />
     </SpaProvider>
   );
 }
